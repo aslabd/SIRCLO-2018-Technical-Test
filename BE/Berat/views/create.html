@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Berat - Index</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+<h1>Berat - Index</h1>
+<div>
+  <form action="/berat" method="POST">
+    <table border="1">
+      <tr>
+        <td>Tanggal:</td>
+        <td><input id="tanggal" type="date" name="tanggal"></td>
+      </tr>
+      <tr>
+        <td>Berat Maksimal:</td>
+        <td><input id="max" type="number" name="max" min="0"></td>
+      </tr>
+      <tr>
+        <td>Berat Minimal:</td>
+        <td><input id="min" type="number" name="min" min="0"></td>
+      </tr>
+      <tr>
+        <td colspan="2"><input type="submit"></td>
+      </tr>
+    </table>
+  </form>
+</div>
+<script type="text/javascript">
+(function() {
+  $("form").submit(function(event) {
+    var tanggal = $("#tanggal").val();
+    var max = $("#max").val();
+    var min = $("#min").val();
+
+    $.ajax({
+      method: "POST",
+      url: "http://localhost:3000/berat/api/create",
+      contentType: "application/json",
+      data: { tanggal: tanggal, max: max, min: min },
+      dataType: "json"
+    })
+    .done(function(result) {
+      alert("Berhasil menambahkan data.");
+    });    
+  })
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Berat - Index</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+<h1>Berat - Index</h1>
+<div>
+  <table border="1">
+    <thead>
+      <tr>
+        <th>Tanggal</th>
+        <th>Max</th>
+        <th>Min</th>
+        <th>Perbedaan</th>
+        <th colspan="2">Aksi</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+    <tfoot>
+      <tr>
+        <th>Rata-rata</th>
+      </tr>
+    </tfoot>
+  </table>
+  <a href="/berat/create">Tambah data</a>
+</div>
+ 
+<script>
+(function() {
+  $.ajax({
+    method: "GET",
+    url: "http://localhost:3000/berat/api/all",
+    dataType: "json"
+  })
+  .done(function(result) {
+    result.data.forEach(function(item) {
+      var html =  '<tr>' +
+                  ' <td>' + item.tanggal.split('T')[0] +'</td>' +
+                  ' <td>' + item.max + '</td>' +
+                  ' <td>' + item.min + '</td>' +
+                  ' <td>' + item.selisih + '</td>' +
+                  ' <td><a href="/berat/detail/' + item._id + '">Detail</a></td>' +
+                  ' <td><a href="">Edit</a></td>' +
+                  '</tr>';
+      $("tbody").append(html);
+    });
+  });
+  $.ajax({
+    method: "GET",
+    url: "http://localhost:3000/berat/api/average",
+    dataType: "json"
+  })
+  .done(function(result) {
+    var html =  ' <td>' + result.data.rerata_max.toFixed(2) +'</td>' +
+                ' <td>' + result.data.rerata_min.toFixed(2) + '</td>' +
+                ' <td>' + result.data.rerata_selisih.toFixed(2) + '</td>';
+    $("tfoot tr").append(html);
+  });
+})();
+</script>
+ 
+</body>
+</html>

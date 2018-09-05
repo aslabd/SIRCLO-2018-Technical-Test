@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Berat - Detail</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+<h1>Berat - Detail</h1>
+<div>
+  <table border="1">
+    <thead>
+      <tr>
+        <th>Tanggal</th>
+        <th>Max</th>
+        <th>Min</th>
+        <th>Perbedaan</th>
+        <th>Aksi</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  <a href="/berat/create">Tambah data</a>
+</div>
+ 
+<script>
+(function() {
+  // mendapatkan id dari path URL
+  var id = window.location.pathname.split('/')[3];
+
+  // request API dengan Ajax
+  $.ajax({
+    method: "GET",
+    url: "http://localhost:3000/berat/api/detail/" + id,
+    dataType: "json"
+  })
+  .done(function(result) {
+    var html =  '<tr>' +
+                ' <td>' + result.data.tanggal.split('T')[0] +'</td>' +
+                ' <td>' + result.data.max + '</td>' +
+                ' <td>' + result.data.min + '</td>' +
+                ' <td>' + result.data.selisih + '</td>' +
+                ' <td><a href="">Edit</a></td>' +
+                '</tr>';
+    $("tbody").append(html);
+  });
+})();
+</script>
+ 
+</body>
+</html>
