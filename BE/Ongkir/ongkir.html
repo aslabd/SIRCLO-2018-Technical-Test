@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Ongkir</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+<h1>Ongkir</h1>
+<div>
+  <table border="1">
+    <tr>
+      <td>Layanan:</td>
+      <td><select id="layanan" name="layanan"></select></td>
+    </tr>
+    <tr>
+      <td>Berat Barang:</td>
+      <td><input id="berat" type="number" name="berat" min="0" step="1"></td>
+    </tr>
+    <tr>
+      <td colspan="2"><input id="submit" type="submit"></td>
+    </tr>
+	  <tr>
+      <td>Harga:</td>
+      <td><input id="harga" type="number" name="harga" min="0"></td>
+    </tr>
+  </table>
+</div>
+ 
+<script>
+(function() {
+  // daftar layanan
+  var layanan = {
+	  Reguler: 9000,
+	  Express: 9000 * 2,
+	  Instant: 9000 * 5
+  }
+  
+  // untuk option pada select
+  var html = '';
+  for (item in layanan) {  
+	  html = html + '<option value="' + item + '">' + item + ' (' + layanan[item] + '/kg)</option>';
+  }
+  $("select").append(html);
+  
+  // ketika tombol submit ditekan, ambil datanya, hitung ongkirnya
+  $("#submit").click(function(event) {
+	  var harga = layanan[$("select#layanan").val()];
+	  var berat = $("#berat").val();
+	  $("#harga").attr("value", harga * berat);
+  });
+})();
+</script>
+ 
+</body>
+</html>
