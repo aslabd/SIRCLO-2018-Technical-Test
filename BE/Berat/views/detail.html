@@ -20,7 +20,7 @@
     </thead>
     <tbody></tbody>
   </table>
-  <a href="/berat/create">Tambah data</a>
+  <a href="/berat/create">Tambah data</a>|<a href="/berat">Lihat data</a>
 </div>
  
 <script>
@@ -40,7 +40,7 @@
                 ' <td>' + result.data.max + '</td>' +
                 ' <td>' + result.data.min + '</td>' +
                 ' <td>' + result.data.selisih + '</td>' +
-                ' <td><a href="">Edit</a></td>' +
+                ' <td><a href="/berat/edit/' + result.data._id + '">Edit</a></td>' +
                 '</tr>';
     $("tbody").append(html);
   });

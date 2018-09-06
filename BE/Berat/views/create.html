@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Berat - Index</title>
+  <title>Berat - Create</title>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 <body>
-<h1>Berat - Index</h1>
+<h1>Berat - Create</h1>
 <div>
-  <form action="/berat" method="POST">
+  <form>
     <table border="1">
       <tr>
         <td>Tanggal:</td>
@@ -27,23 +27,28 @@
       </tr>
     </table>
   </form>
+  <a href="/berat">Lihat data</a>
 </div>
 <script type="text/javascript">
 (function() {
+  // untuk submit form
   $("form").submit(function(event) {
     var tanggal = $("#tanggal").val();
     var max = $("#max").val();
     var min = $("#min").val();
 
+    // Harus async: false sepertinya, gagal terus yang lainnya
     $.ajax({
       method: "POST",
-      url: "http://localhost:3000/berat/api/create",
-      contentType: "application/json",
-      data: { tanggal: tanggal, max: max, min: min },
-      dataType: "json"
+      url: "/berat/api/create",
+      data: { tanggal: new Date(tanggal), max: max, min: min },
+      async: false
     })
     .done(function(result) {
-      alert("Berhasil menambahkan data.");
+     alert("Berhasil menambahkan data.");
+    })
+    .fail(function(jqXHR, textStatus, errorThrown) {
+      alert(textStatus, errorThrown);
     });    
   })
 })();

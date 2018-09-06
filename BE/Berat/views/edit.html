@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Berat - Edit</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+<h1>Berat - Edit</h1>
+<div>
+  <form>
+    <table border="1">
+      <tr>
+        <td>Tanggal:</td>
+        <td><input id="tanggal" type="date" name="tanggal"></td>
+      </tr>
+      <tr>
+        <td>Berat Maksimal:</td>
+        <td><input id="max" type="number" name="max" min="0"></td>
+      </tr>
+      <tr>
+        <td>Berat Minimal:</td>
+        <td><input id="min" type="number" name="min" min="0"></td>
+      </tr>
+      <tr>
+        <td colspan="2"><input type="submit"></td>
+      </tr>
+    </table>
+  </form>
+  <a href="/berat">Lihat data</a>
+</div>
+<script type="text/javascript">
+(function() {
+  // mendapatkan id dari path URL
+  var id = window.location.pathname.split('/')[3];
+  // untuk isi awalnya
+  $.ajax({
+    method: "GET",
+    url: "http://localhost:3000/berat/api/detail/" + id,
+    dataType: "json"
+  })
+  .done(function(result) {
+    $("input#tanggal").attr("value", new Date(result.data.tanggal).toISOString().split('T')[0]);
+    $("input#max").attr("value", result.data.max);
+    $("input#min").attr("value", result.data.min);
+  });
+
+  // untuk submit form
+  $("form").submit(function(event) {
+    var tanggal = $("#tanggal").val();
+    var max = $("#max").val();
+    var min = $("#min").val();
+
+    // Harus async: false sepertinya, gagal terus yang lainnya
+    $.ajax({
+      method: "PATCH",
+      url: "/berat/api/edit",
+      data: { id: id, tanggal: new Date(tanggal), max: max, min: min },
+      async: false
+    })
+    .done(function(result) {
+     alert("Berhasil mengubah data.");
+    })
+    .fail(function(jqXHR, textStatus, errorThrown) {
+      alert(textStatus, errorThrown);
+    });    
+  })
+})();
+</script>
+</body>
+</html>

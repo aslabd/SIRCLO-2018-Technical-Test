@@ -23,6 +23,10 @@ router.post('/api/create', function(req, res, next) {
 router.patch('/api/edit', function(req, res, next) {
 	berat.edit(req, res);
 });
+
+router.patch('/api/delete', function(req, res, next) {
+	berat.edit(req, res);
+});
 // Akhir: Router API
 
 // Mulai: Router Views

@@ -76,10 +76,10 @@ function BeratControllers() {
 
 	this.create = function(req, res) {
 		let tanggal = req.body.tanggal;
-		let max = req.body.max;
-		let min = req.body.min;
+		let max = Number(req.body.max);
+		let min = Number(req.body.min);
 
-		if (tanggal == null || max == null || min == null) {
+		if (tanggal == null || max == null || min == null || max < min) {
 			res.json({status: {code: 400, success: false}, message: 'Ada kesalahan pada input.'});
 		} else {
 			let selisih = Math.abs(max - min);
@@ -92,6 +92,72 @@ function BeratControllers() {
 				})
 				.then(function(berat) {
 					res.json({status: {code: 200, success: true}, message: 'Berhasil menambahkan data', data: berat});
+				})
+				.catch(function(err) {
+					res.json({status: {code: 500, success: false}, message: 'Ada kesalahan pada kueri.', err: err});
+				})
+		}
+	}
+
+	this.edit = function(req, res) {
+		let id = req.body.id;
+		let tanggal = req.body.tanggal;
+		let max = Number(req.body.max);
+		let min = Number(req.body.min);
+
+		if (id == null || tanggal == null || max == null || min == null || max < min) {
+			res.json({status: {code: 400, success: false}, message: 'Ada kesalahan pada input.'});
+		} else {
+			let selisih = Math.abs(max - min);
+
+			Berat
+				.findById(id)
+				.then(function(berat) {
+					if (berat == null || berat == 0) {
+						res.json({status: {code: 204, success: false}, message: 'Tidak ada data.'});
+					} else {
+						Berat
+							.findByIdAndUpdate(id, {
+								tanggal: tanggal,
+								max: max,
+								min: min,
+								selisih: selisih
+							})
+							.then(function(berat) {
+								res.json({status: {code: 200, success: true}, message: 'Berhasil mengubah data', data: berat});
+							})
+							.catch(function(err) {
+								res.json({status: {code: 500, success: false}, message: 'Ada kesalahan pada kueri.', err: err});
+							})
+					}
+				})
+				.catch(function(err) {
+					res.json({status: {code: 500, success: false}, message: 'Ada kesalahan pada kueri.', err: err});
+				})
+		}
+	}
+
+	this.edit = function(req, res) {
+		let id = req.body.id;
+
+		if (id == null) {
+			res.json({status: {code: 400, success: false}, message: 'Ada kesalahan pada input.'});
+		} else {
+			Berat
+				.findById(id)
+				.then(function(berat) {
+					if (berat == null || berat == 0) {
+						res.json({status: {code: 204, success: false}, message: 'Tidak ada data.'});
+					} else {
+						Berat
+							.findByIdAndRemove(id)
+							.then(function(berat) {
+								res.json({status: {code: 200, success: true}, message: 'Berhasil menghapus data', data: berat});
+							})
+							.catch(function(err) {
+								res.json({status: {code: 500, success: false}, message: 'Ada kesalahan pada kueri.', err: err});
+							})
+					}
 				})
 				.catch(function(err) {
 					res.json({status: {code: 500, success: false}, message: 'Ada kesalahan pada kueri.', err: err});
